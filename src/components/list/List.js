@@ -7,7 +7,7 @@ export class List extends Component {
   render() {
     return (
       <ul className="list-group">
-        { this.context.map(i => <Task value={i.name} key={i._id}/>) }
+        { this.context.tasks.map(i => <Task value={i.name} taskId={i._id} key={i._id}/>) }
       </ul>
     )
   }
