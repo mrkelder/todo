@@ -1,24 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Wrapper from './components/wrapper/Wrapper';
+import Input from './components/input/Input';
+import List from './components/list/List';
+import { taskContext } from './Context';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <taskContext.Provider value={[{ _id: 1, name: 'Walk the dog' }, { _id: 2, name: 'Wash the dishes' }]}>
+        <Wrapper >
+          <h1>TODO</h1>
+          <hr />
+          <Input />
+          <hr />
+          <List />
+        </Wrapper>
+      </taskContext.Provider>
     </div>
   );
 }

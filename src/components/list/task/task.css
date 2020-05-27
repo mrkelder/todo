@@ -1,0 +1,13 @@
+.tasks{
+  display: flex;
+  align-items: center;
+}
+
+.tasks span{
+  margin-left: 5px;
+}
+
+.list-group button{
+  margin: auto;
+  margin-right: 0;
+}

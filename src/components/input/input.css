@@ -1,0 +1,12 @@
+#todo_input {
+  display: flex;
+}
+
+#todo_input > input {
+  flex: 1;
+  border: 1px solid #818181;
+}
+
+#todo_input > button {
+  margin-left: 5px;
+}

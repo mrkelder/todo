@@ -1,0 +1,10 @@
+#wrapper {
+  width: 50vw;
+  border: 1.3px solid #818181;
+  padding: 15px;
+}
+
+#wrapper > hr{
+  background-color: #818181;
+  height: .6px;
+}
