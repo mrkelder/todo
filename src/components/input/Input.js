@@ -11,6 +11,12 @@ export class Input extends Component {
     this.changeInput = this.changeInput.bind(this);
   }
 
+  componentDidMount(){
+    window.addEventListener('keypress' , e => {
+      if(e.code.toLocaleLowerCase() === 'enter') this.addTask();
+    });
+  }
+
   addTask(){
     if(this.state.value.length !== 0) this.context.addTask(this.state.value);
     this.setState({ value: '' })

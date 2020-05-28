@@ -7,17 +7,23 @@ export class Task extends Component {
     super(props);
 
     this.deleteTask = this.deleteTask.bind(this);
+    this.completeTask = this.completeTask.bind(this);
   }
 
   deleteTask(){
-    this.context.removeTask(this.props.taskId);
+    this.context.removeTask(this.props.task._id);
+  }
+
+  completeTask(){
+    this.context.completeTask(this.props.task._id);
   }
 
   static contextType = taskContext;
   render() {
+    const { name , completed } = this.props.task;
     return (
       <li className="list-group-item tasks">
-        <span>{this.props.value}</span>
+        <span onClick={this.completeTask} style={completed === true ? { textDecoration: 'line-through' } : {textDecoration: 'none' }}>{name}</span>
         <button className="btn btn-danger" onClick={this.deleteTask}>Remove</button>
       </li>
     )
