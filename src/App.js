@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Wrapper from './components/wrapper/Wrapper';
 import Input from './components/input/Input';
 import List from './components/list/List';
+import axios from 'axios';
 import { taskContext } from './Context';
 
 class App extends Component {
@@ -9,11 +10,18 @@ class App extends Component {
     super(props);
 
     this.state = {
-      tasks: [{ _id: 1, name: 'Walk the dog', completed: false }, { _id: 2, name: 'Wash the dishes', completed: false }]
+      tasks: undefined,
+      loaded: false
     }
     this.removeTask = this.removeTask.bind(this);
     this.addTask = this.addTask.bind(this);
     this.completeTask = this.completeTask.bind(this);
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8080/getTasks', { params: { rule: JSON.stringify({}) } })
+      .then(info => { this.setState({ tasks: info.data, loaded: true }) })
+      .catch(err => { this.setState({ loaded: true }); console.error(err); });
   }
 
   removeTask(id) {
@@ -33,7 +41,7 @@ class App extends Component {
           if (i._id === id) {
             const readyObject = i;
             readyObject.completed = !i.completed;
-            return readyObject; 
+            return readyObject;
           }
           else return i;
         })
@@ -41,10 +49,10 @@ class App extends Component {
     });
   }
 
-  addTask(text) {
+  addTask({ id, text }) {
     this.setState(oldState => {
       const { tasks } = oldState;
-      tasks[tasks.length] = { _id: ++tasks.length, name: text, completed: false };
+      tasks[tasks.length] = { _id: id, name: text, completed: false };
       return ({ tasks });
     });
   }
@@ -52,7 +60,7 @@ class App extends Component {
   render() {
     return (
       <div className="App" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-        <taskContext.Provider value={{ tasks: this.state.tasks, removeTask: this.removeTask, addTask: this.addTask, completeTask: this.completeTask }}>
+        <taskContext.Provider value={{ loaded: this.state.loaded, tasks: this.state.tasks, removeTask: this.removeTask, addTask: this.addTask, completeTask: this.completeTask }}>
           <Wrapper >
             <h1>TODO</h1>
             <hr />
