@@ -29,7 +29,6 @@ export class Input extends Component {
   }
 
   changeInput(e) {
-    console.log(this.state.value)
     this.setState({
       value: e.target.value
     });

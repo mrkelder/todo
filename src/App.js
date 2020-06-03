@@ -16,9 +16,16 @@ class App extends Component {
     this.removeTask = this.removeTask.bind(this);
     this.addTask = this.addTask.bind(this);
     this.completeTask = this.completeTask.bind(this);
+    this.renderTasks = this.renderTasks.bind(this);
   }
 
   componentDidMount() {
+    this.renderTasks();
+  }
+
+  renderTasks() {
+    // Renders tasks
+    this.setState({ tasks: undefined, loaded: false });
     axios.get('http://localhost:8080/getTasks', { params: { rule: JSON.stringify({}) } })
       .then(info => { this.setState({ tasks: info.data, loaded: true }) })
       .catch(err => { this.setState({ loaded: true }); console.error(err); });
@@ -60,7 +67,7 @@ class App extends Component {
   render() {
     return (
       <div className="App" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-        <taskContext.Provider value={{ loaded: this.state.loaded, tasks: this.state.tasks, removeTask: this.removeTask, addTask: this.addTask, completeTask: this.completeTask }}>
+        <taskContext.Provider value={{ loaded: this.state.loaded, tasks: this.state.tasks, removeTask: this.removeTask, addTask: this.addTask, completeTask: this.completeTask, renderTasks: this.renderTasks }}>
           <Wrapper >
             <h1>TODO</h1>
             <hr />

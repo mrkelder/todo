@@ -30,7 +30,7 @@ export class Task extends Component {
         <span onClick={this.completeTask} style={completed === true ? { textDecoration: 'line-through' } : { textDecoration: 'none' }}>{name}</span>
         <button className="btn btn-danger" onClick={this.deleteTask}>Remove</button>
       </li>
-    )
+    );
   }
 }
 
