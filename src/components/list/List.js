@@ -14,7 +14,7 @@ export class List extends Component {
       );
       else if (this.context.tasks.length !== 0)
         return (
-          <ul className="list-group">
+          <ul className="list-group" style={{overflowY: 'auto' , maxHeight: '50vh'}}>
             {this.context.tasks.map(i => <Task task={i} key={i._id} />)}
           </ul>
         );
