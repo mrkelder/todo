@@ -21,7 +21,7 @@ export class Calendar extends Component {
         { name: 'Ноябрь', id: 10 },
         { name: 'Декабрь', id: 11 },
       ],
-      date: new Date().getDay(),
+      date: new Date().getDate(),
       month: new Date().getMonth(),
       year: new Date().getFullYear(),
       showMonthList: false,
@@ -35,11 +35,24 @@ export class Calendar extends Component {
     this.rightArrow = this.rightArrow.bind(this);
     this.leftArrow = this.leftArrow.bind(this);
     this.renderTotalDate = this.renderTotalDate.bind(this);
+    this.chooseReadyDate = this.chooseReadyDate.bind(this);
   }
 
   componentDidMount() {
     document.getElementsByClassName('dateButton')[this.state.date - 1].style.backgroundColor = '#007bff';
     document.getElementsByClassName('dateButton')[this.state.date - 1].style.color = 'white';
+  }
+
+  chooseReadyDate(e) {
+    const date = new Date(e.target.getAttribute('data-date'));
+    this.setState({
+      month: date.getMonth(),
+      year: date.getFullYear(),
+      date: date.getDate()
+    }, () => {
+      this.renderTotalDate();
+      this.chooseDate({ target: document.getElementsByClassName('dateButton')[this.state.date - 1] });
+    });
   }
 
   leftArrow() {
@@ -78,6 +91,7 @@ export class Calendar extends Component {
 
   chooseDate(e) {
     // Picks the date
+    console.log(e)
     if (e.target.style.backgroundColor.length === 0 || e.target.style.backgroundColor === 'white') {
       for (let i of document.getElementsByClassName('dateButton')) {
         i.style.backgroundColor = 'white';
@@ -116,7 +130,7 @@ export class Calendar extends Component {
   static contextType = taskContext;
   render() {
     return (
-      <div className="calendar" style={ this.context.isCalendarOpen ? {display: 'block'} : {display: 'none'} }>
+      <div className="calendar" style={this.context.isCalendarOpen ? { display: 'block' } : { display: 'none' }}>
         <div className="calendarBar">
           <div className="month">
             <span onClick={() => { this.setState(state => ({ showMonthList: !state.showMonthList, showDayList: !state.showDayList })) }}>{this.state.months[this.state.month].name}</span>
@@ -134,6 +148,37 @@ export class Calendar extends Component {
             <path fillRule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5H11a.5.5 0 0 1 0 1H4.5A.5.5 0 0 1 4 8z" />
           </svg>
         </div>
+        <ul className="options">
+          {[{
+            name: 'Завтра', date: () => {
+              const currentDate = new Date(this.context.currentDate);
+              const tomorrow = new Date(currentDate);
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              return tomorrow;
+              // if (currentDate.getMonth() === 11 && currentDate.getDate() === 31) {
+              //   return new Date(`${currentDate.getFullYear() + 1} , 1 , 1`);
+              // }
+              // else if ((currentDate.getDate() === 31 && currentDate.getMonth() % 2 === 0) || (currentDate.getDate() === 30 && currentDate.getMonth() % 2 === 1)) {
+              //   return new Date(`${currentDate.getFullYear()} , ${currentDate.getMonth() + 2} , 1`);
+              // }
+              // else return new Date(`${currentDate.getFullYear()} , ${currentDate.getMonth()} , ${currentDate.getDate() + 1}`);
+            }
+          },
+          {
+            name: 'Следующий понедельник', date: () => {
+              let currentDate = new Date(this.context.currentDate);
+              if (currentDate.getDay() === 0) currentDate.setDate(currentDate.getDate() + 1);
+
+              while (currentDate.getDay() !== 0) {
+                currentDate.setDate(currentDate.getDate() + 1);
+              }
+              currentDate.setDate(currentDate.getDate() + 1);
+
+              return currentDate;
+            }
+          },
+          { name: 'Сегодня', date: () => new Date() }].map((i, index) => <li onClick={this.chooseReadyDate} data-date={i.date()} key={index}>{i.name}</li>)}
+        </ul>
         {
           this.state.showDayList && <table className="table">
             <tbody>

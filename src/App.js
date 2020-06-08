@@ -3,6 +3,7 @@ import Wrapper from './components/wrapper/Wrapper';
 import Input from './components/input/Input';
 import List from './components/list/List';
 import Calendar from './components/calendar/Calendar';
+import ChooseDate from './components/chooseDate/chooseDate';
 import axios from 'axios';
 import { taskContext } from './Context';
 
@@ -15,7 +16,8 @@ class App extends Component {
       loaded: false,
       showCalendar: false,
       dateForTask: new Date(),
-      isCalendarOpen: false
+      currentDate: new Date(),
+      isCalendarOpen: !false
     }
     this.removeTask = this.removeTask.bind(this);
     this.addTask = this.addTask.bind(this);
@@ -29,7 +31,7 @@ class App extends Component {
     this.renderTasks();
   }
 
-  openCalendar(){
+  openCalendar() {
     this.setState(state => ({ isCalendarOpen: !state.isCalendarOpen }));
   }
 
@@ -66,7 +68,7 @@ class App extends Component {
     });
   }
 
-  addTask({ id, text , date}) {
+  addTask({ id, text, date }) {
     this.setState(oldState => {
       const { tasks } = oldState;
       tasks[tasks.length] = { _id: id, name: text, completed: false, date: date };
@@ -91,15 +93,18 @@ class App extends Component {
           renderTasks: this.renderTasks,
           dateForTask: this.state.dateForTask,
           isCalendarOpen: this.state.isCalendarOpen,
-          openCalendar: this.openCalendar
+          openCalendar: this.openCalendar,
+          currentDate: this.state.currentDate
         }}>
+
           <Wrapper >
+            <ChooseDate />
             <h1>TODO</h1>
             <hr />
             <Input />
             <hr />
             <List />
-            <Calendar getDate={this.getDate} isCalendarOpen={this.state.isCalendarOpen}/>
+            <Calendar getDate={this.getDate} isCalendarOpen={this.state.isCalendarOpen} />
           </Wrapper>
         </taskContext.Provider>
       </div>
