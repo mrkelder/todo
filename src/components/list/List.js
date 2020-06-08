@@ -20,8 +20,8 @@ export class List extends Component {
               const { currentDate } = this.context;
               const year = date.getFullYear();
               const month = date.getMonth();
-              const day = date.getDay();
-              if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDay())
+              const day = date.getDate();
+              if (year === currentDate.getFullYear() && month === currentDate.getMonth() && day === currentDate.getDate())
                 return <Task task={i} key={i._id} />;
               else
                 return null;

@@ -91,7 +91,6 @@ export class Calendar extends Component {
 
   chooseDate(e) {
     // Picks the date
-    console.log(e)
     if (e.target.style.backgroundColor.length === 0 || e.target.style.backgroundColor === 'white') {
       for (let i of document.getElementsByClassName('dateButton')) {
         i.style.backgroundColor = 'white';
