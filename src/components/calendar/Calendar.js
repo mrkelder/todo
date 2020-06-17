@@ -25,8 +25,7 @@ export class Calendar extends Component {
       month: new Date().getMonth(),
       year: new Date().getFullYear(),
       showMonthList: false,
-      showDayList: true,
-      isCalendarOpen: this.props.isCalendarOpen
+      showDayList: true
     }
     this.chooseDate = this.chooseDate.bind(this);
     this.chooseMonth = this.chooseMonth.bind(this);
@@ -123,13 +122,12 @@ export class Calendar extends Component {
 
   renderTotalDate() {
     this.props.getDate(new Date(String(this.state.year), String(this.state.month), String(this.state.date)));
-    this.context.openCalendar();
   }
 
   static contextType = taskContext;
   render() {
     return (
-      <div className="calendar" style={this.context.isCalendarOpen ? { display: 'block' } : { display: 'none' }}>
+      <div className="calendar" style={Object.assign(this.props.isCalendarOpen ? { display: 'block' } : { display: 'none' }, this.props.style)}>
         <div className="calendarBar">
           <div className="month">
             <span onClick={() => { this.setState(state => ({ showMonthList: !state.showMonthList, showDayList: !state.showDayList })) }}>{this.state.months[this.state.month].name}</span>
@@ -147,37 +145,32 @@ export class Calendar extends Component {
             <path fillRule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5H11a.5.5 0 0 1 0 1H4.5A.5.5 0 0 1 4 8z" />
           </svg>
         </div>
-        <ul className="options">
-          {[{
-            name: 'Завтра', date: () => {
-              const currentDate = new Date(this.context.currentDate);
-              const tomorrow = new Date(currentDate);
-              tomorrow.setDate(tomorrow.getDate() + 1);
-              return tomorrow;
-              // if (currentDate.getMonth() === 11 && currentDate.getDate() === 31) {
-              //   return new Date(`${currentDate.getFullYear() + 1} , 1 , 1`);
-              // }
-              // else if ((currentDate.getDate() === 31 && currentDate.getMonth() % 2 === 0) || (currentDate.getDate() === 30 && currentDate.getMonth() % 2 === 1)) {
-              //   return new Date(`${currentDate.getFullYear()} , ${currentDate.getMonth() + 2} , 1`);
-              // }
-              // else return new Date(`${currentDate.getFullYear()} , ${currentDate.getMonth()} , ${currentDate.getDate() + 1}`);
-            }
-          },
-          {
-            name: 'Следующий понедельник', date: () => {
-              let currentDate = new Date(this.context.currentDate);
-              if (currentDate.getDay() === 0) currentDate.setDate(currentDate.getDate() + 1);
-
-              while (currentDate.getDay() !== 0) {
-                currentDate.setDate(currentDate.getDate() + 1);
+        {this.state.showDayList &&
+          <ul className="options">
+            {[{
+              name: 'Завтра', date: () => {
+                const currentDate = new Date(this.context.currentDate);
+                const tomorrow = new Date(currentDate);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                return tomorrow;
               }
-              currentDate.setDate(currentDate.getDate() + 1);
+            },
+            {
+              name: 'Следующий понедельник', date: () => {
+                let currentDate = new Date(this.context.currentDate);
+                if (currentDate.getDay() === 0) currentDate.setDate(currentDate.getDate() + 1);
 
-              return currentDate;
-            }
-          },
-          { name: 'Сегодня', date: () => new Date() }].map((i, index) => <li onClick={this.chooseReadyDate} data-date={i.date()} key={index}>{i.name}</li>)}
-        </ul>
+                while (currentDate.getDay() !== 0) {
+                  currentDate.setDate(currentDate.getDate() + 1);
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+
+                return currentDate;
+              }
+            },
+            { name: 'Сегодня', date: () => new Date() }].map((i, index) => <li onClick={this.chooseReadyDate} data-date={i.date()} key={index}>{i.name}</li>)}
+          </ul>
+        }
         {
           this.state.showDayList && <table className="table">
             <tbody>

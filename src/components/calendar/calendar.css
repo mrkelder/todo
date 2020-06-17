@@ -1,6 +1,5 @@
 .calendar {
-  top: 96px;
-  right: 115px;
+  z-index: 99;
   position: absolute;
   background-color: white;
   border: 1.3px solid #818181;

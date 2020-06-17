@@ -14,10 +14,9 @@ class App extends Component {
     this.state = {
       tasks: undefined,
       loaded: false,
-      showCalendar: false,
       dateForTask: new Date(),
       currentDate: new Date(),
-      isCalendarOpen: !false
+      isCalendarOpen: false
     }
     this.removeTask = this.removeTask.bind(this);
     this.addTask = this.addTask.bind(this);
@@ -25,6 +24,7 @@ class App extends Component {
     this.renderTasks = this.renderTasks.bind(this);
     this.getDate = this.getDate.bind(this);
     this.openCalendar = this.openCalendar.bind(this);
+    this.changeCurrentDate = this.changeCurrentDate.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +33,10 @@ class App extends Component {
 
   openCalendar() {
     this.setState(state => ({ isCalendarOpen: !state.isCalendarOpen }));
+  }
+
+  changeCurrentDate(date) {
+    this.setState({ currentDate: date });
   }
 
   renderTasks() {
@@ -77,14 +81,14 @@ class App extends Component {
   }
 
   getDate(date) {
-    this.setState({ dateForTask: date })
+    this.setState({ dateForTask: date });
+    this.openCalendar();
   }
 
   render() {
     return (
       <div className="App" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
         <taskContext.Provider value={{
-          showCalendar: this.showCalendar,
           loaded: this.state.loaded,
           tasks: this.state.tasks,
           removeTask: this.removeTask,
@@ -94,7 +98,8 @@ class App extends Component {
           dateForTask: this.state.dateForTask,
           isCalendarOpen: this.state.isCalendarOpen,
           openCalendar: this.openCalendar,
-          currentDate: this.state.currentDate
+          currentDate: this.state.currentDate,
+          changeCurrentDate: this.changeCurrentDate
         }}>
 
           <Wrapper >
@@ -104,7 +109,7 @@ class App extends Component {
             <Input />
             <hr />
             <List />
-            <Calendar getDate={this.getDate} isCalendarOpen={this.state.isCalendarOpen} />
+            <Calendar getDate={this.getDate} isCalendarOpen={this.state.isCalendarOpen} style={ { top: '96px' , right: '115px' } }/>
           </Wrapper>
         </taskContext.Provider>
       </div>
