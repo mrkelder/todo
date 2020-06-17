@@ -4,9 +4,9 @@ import './wrapper.css';
 export class Wrapper extends Component {
   render() {
     return (
-      <div id="wrapper" className="rounded" ref={'aaa'}>
+      <div id="wrapper" className="rounded">
         {this.props.children}
-      </div>
+      </div >
     )
   }
 }

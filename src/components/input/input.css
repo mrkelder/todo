@@ -1,5 +1,6 @@
 #todo_input {
   display: flex;
+  align-items: center;
 }
 
 #todo_input > input {
@@ -9,4 +10,11 @@
 
 #todo_input > button {
   margin-left: 5px;
+}
+
+.schedule{
+  cursor: pointer;
+  margin: 0 10px;
+  width: 20px;
+  height: 20px;
 }

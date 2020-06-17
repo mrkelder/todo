@@ -1,9 +1,9 @@
 #wrapper {
+  position: relative;
   width: 50vw;
   border: 1.3px solid #818181;
   padding: 15px;
   max-height: 92vh;
-  overflow-y: auto;
 }
 
 #wrapper > hr{
