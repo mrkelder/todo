@@ -1,37 +1,30 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import { taskContext } from '../../../Context';
 import axios from 'axios';
 import './task.css';
 
-export class Task extends Component {
-  constructor(props) {
-    super(props);
+const Task = (props) => {
+  const context = useContext(taskContext);
 
-    this.deleteTask = this.deleteTask.bind(this);
-    this.completeTask = this.completeTask.bind(this);
-  }
+  const deleteTask = () => {
+    axios.get('http://localhost:8080/deleteTask', { params: { _id: props.task._id } });
+    context.removeTask(props.task._id);
+  };
 
-  deleteTask() {
-    axios.get('http://localhost:8080/deleteTask', { params: { _id: this.props.task._id } });
-    this.context.removeTask(this.props.task._id);
-  }
+  const completeTask = () => {
+    const completed = props.task.completed;
+    axios.get('http://localhost:8080/completeTask', { params: { _id: props.task._id, completed } });
+    context.completeTask(props.task._id);
+  };
 
-  completeTask() {
-    const completed = this.props.task.completed;
-    axios.get('http://localhost:8080/completeTask', { params: { _id: this.props.task._id, completed } });
-    this.context.completeTask(this.props.task._id);
-  }
+  const { name, completed } = props.task;
 
-  static contextType = taskContext;
-  render() {
-    const { name, completed } = this.props.task;
-    return (
-      <li className="list-group-item tasks">
-        <span onClick={this.completeTask} style={completed === true ? { textDecoration: 'line-through' } : { textDecoration: 'none' }}>{name}</span>
-        <button className="btn btn-danger" onClick={this.deleteTask}>Remove</button>
-      </li>
-    );
-  }
-}
+  return (
+    <li className="list-group-item tasks">
+      <span onClick={completeTask} style={completed === true ? { textDecoration: 'line-through' } : { textDecoration: 'none' }}>{name}</span>
+      <button className="btn btn-danger" onClick={deleteTask}>Remove</button>
+    </li>
+  );
+};
 
 export default Task
